@@ -4,13 +4,14 @@
 The 16.04 ISO file can be found here: http://releases.ubuntu.com/16.04/
 
 ## 2. Install Nvidia Gpu driver
+``` bash
 sudo add-apt-repository ppa:graphics-drivers
 sudo apt-get update
 sudo apt-get install nvidia-384 
-
-Current long-lived branch release: `nvidia-384`
-
-##3 Install some dependencies
+```
+Current long-lived branch release is nvidia-384.
+Restart the computer to activate Gpu driver.
+## 3. Install some dependencies
 sudo apt-get update
 sudo apt-get upgrade  
 sudo apt-get install build-essential cmake g++ gfortran 
@@ -19,91 +20,78 @@ sudo apt-get install software-properties-common wget
 sudo apt-get autoremove 
 sudo rm -rf /var/lib/apt/lists/*
 
-## 4. Install CUDA and cuDNN
-This and the following steps require Internet connection.
+## 4. Install CUDA 9.0 
+Download CUDA 9.0 from https://developer.nvidia.com/cuda-90-download-archive
 
-
-Install some useful packages in terminal:
 ``` bash
-sudo apt-get update
-sudo apt-get install \
-  aptitude \
-  freeglut3-dev \
-  g++-4.8 \
-  gcc-4.8 \
-  libglu1-mesa-dev \
-  libx11-dev \
-  libxi-dev \
-  libxmu-dev \
-  nvidia-modprobe \
-  python-dev \
-  python-pip \
-  python-virtualenv \
-  vim
-```
-
-
-### Install CUDA
-
-Download CUDA installation file: https://developer.nvidia.com/cuda-downloads
-
-Choose Linux -> x86_64 -> Ubuntu -> 14.04 -> deb (local)  -> Download
-
-Install CUDA in terminal (use the specific .deb file you've downloaded):
-``` bash
-cd ~/Downloads
-sudo dpkg -i cuda-repo-ubuntu1404-8-0-local-ga2_8.0.61-1_amd64.deb
+sudo dpkg -i cuda-repo-ubuntu1604-9-0-local_9.0.176-1_amd64.deb
 sudo apt-get update
 sudo apt-get install cuda
+
+echo 'export PATH=/usr/local/cuda/bin:$PATH' >> ~/.bashrc
+echo 'export LD_LIBRARY_PATH=/usr/local/cuda/lib64:$LD_LIBRARY_PATH' >> ~/.bashrc
+source ~/.bashrc 
 ```
+Restart the computer to activate CUDA driver.
 
-Restart the computer to activate CUDA driver. Now your screen resolution should be automatically changed to highest resolution for the display!
-
-### Install cuDNN
-
-The NVIDIA CUDA® Deep Neural Network library (cuDNN) is aGPU-accelerated library of primitives for deep neural networks with optimizations for convolutions etc.
-
-Register an (free) acount on NVIDIA website and login to download the latest cuDNN library: https://developer.nvidia.com/cudnn
-
-Choose the specific version of cuDNN (denpending on support of your prefered deep learning framework)
-
-Choose `Download cuDNN v5.1 (Jan 20, 2017), for CUDA 8.0` -> `cuDNN v5.1 Library for Linux`
-
-Install cuDNN (by copying files :) in terminal:
-```bash
-cd ~/Downloads
-tar xvf cudnn-8.0-linux-x64-v5.1.tgz
+## 5. Install cudnn 7.0.5
+Download cudnn 7.0.5 from https://developer.nvidia.com/cudnn
+``` bash
+cd ~/Downloads/
+tar xvf cudnn-9.0-linux-x64-v7.tgz
 cd cuda
-sudo cp lib64/* /usr/local/cuda/lib64/
-sudo cp include/cudnn.h /usr/local/cuda/include/
+sudo cp */*.h /usr/local/cuda/include/
+sudo cp */libcudnn* /usr/local/cuda/lib64/
 sudo chmod a+r /usr/local/cuda/lib64/libcudnn*
 ```
-
-### Update your .bashrc
-
-Add the following lines to your `~/.bashrc` file (you can open it by `gedit ~/.bashrc` in terminal)
+## 6. Install python stuff
 ```bash
-export PATH=/usr/local/cuda/bin:$PATH
-export MANPATH=/usr/local/cuda/man:$MANPATH
-export LD_LIBRARY_PATH=/usr/local/cuda/lib64:$LD_LIBRARY_PATH
+sudo apt-get update && apt-get install -y python-numpy python-scipy python-nose python-h5py python-skimage python-matplotlib python-pandas python-sklearn python-sympy
+
+sudo apt-get clean && sudo apt-get autoremove
+
+sudo rm -rf /var/lib/apt/lists/*
+
+sudo apt-get update
+
+sudo apt-get install git python-dev python3-dev python-numpy python3-numpy build-essential python-pip python3-pip python-virtualenv swig python-wheel libcurl3-dev
+
+sudo apt-get install -y libfreetype6-dev libpng12-dev
+
+pip3 install -U matplotlib ipython[all] jupyter pandas scikit-image
+```
+## 7. Install openBLAS
+```bash
+mkdir ~/git
+cd ~/git
+git clone https://github.com/xianyi/OpenBLAS.git
+cd OpenBLAS
+make FC=gfortran -j16
+sudo make PREFIX=/usr/local install 
+```
+## 8. Install TensorFlow for Python3
+```bash
+pip3 install --upgrade tensorflow-gpu==1.5
+```
+## 9. Install an IDE for testing.
+```bash
+sudo apt-get install spyder3
+```
+Use following code in Python3 to test.
+```bash
+import tensorflow as tf
+a = tf.constant(1234)
+b = tf.constant(5678)
+sess = tf.Session()
+sess.run(a+b)
+sess.close()
+```
+## 10. Real-time Gpu usage monitor.
+```bash
+watch nvidia-smi
 ```
 
-```bash
-source ~/.bashrc
-```
 
-To check the installation, print some GPU and driver information by:
-```bash
-nvidia-smi
-nvcc --version
-```
 
-## 4. Install TensorFlow
-Follow TensorFlow official page for installation: https://www.tensorflow.org/install/
-Or install whatever deep learning frameworks that you prefer :)
 
-For example to install TF1.1 with GPU and Python 2.7:
-```bash
-export TF_BINARY_URL=https://storage.googleapis.com/tensorflow/linux/gpu/tensorflow_gpu-1.1.0-cp27-none-linux_x86_64.whl
-sudo pip install --upgrade $TF_BINARY_URL
-```
+
