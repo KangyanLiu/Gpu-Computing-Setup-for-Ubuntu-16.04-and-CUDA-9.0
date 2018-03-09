@@ -12,6 +12,7 @@ sudo apt-get install nvidia-384
 Current long-lived branch release is nvidia-384.
 Restart the computer to activate Gpu driver.
 ## 3. Install some dependencies
+```bash
 sudo apt-get update
 sudo apt-get upgrade  
 sudo apt-get install build-essential cmake g++ gfortran 
@@ -19,7 +20,7 @@ sudo apt-get install git pkg-config python-dev python3-dev
 sudo apt-get install software-properties-common wget
 sudo apt-get autoremove 
 sudo rm -rf /var/lib/apt/lists/*
-
+```
 ## 4. Install CUDA 9.0 
 Download CUDA 9.0 from https://developer.nvidia.com/cuda-90-download-archive
 
