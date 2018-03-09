@@ -3,10 +3,25 @@
 ### Create a bootable USB stick on Ubuntu
 The 16.04 ISO file can be found here: http://releases.ubuntu.com/16.04/
 
-## 2. Install CUDA and cuDNN
+## 2. Install Nvidia Gpu driver
+sudo add-apt-repository ppa:graphics-drivers
+sudo apt-get update
+sudo apt-get install nvidia-384 
+
+Current long-lived branch release: `nvidia-384`
+
+##3 Install some dependencies
+sudo apt-get update
+sudo apt-get upgrade  
+sudo apt-get install build-essential cmake g++ gfortran 
+sudo apt-get install git pkg-config python-dev python3-dev 
+sudo apt-get install software-properties-common wget
+sudo apt-get autoremove 
+sudo rm -rf /var/lib/apt/lists/*
+
+## 4. Install CUDA and cuDNN
 This and the following steps require Internet connection.
 
-### Preparation
 
 Install some useful packages in terminal:
 ``` bash
