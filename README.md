@@ -93,9 +93,12 @@ watch nvidia-smi
 ```
 ## 11. Install Pytorch with pip.
 ```bash
-pip3 install http://download.pytorch.org/whl/cu90/torch-0.3.1-cp35-cp35m-linux_x86_64.whl 
-pip3 install  --no-deps torchvision
+sudo pip3 install http://download.pytorch.org/whl/cu90/torch-0.3.1-cp35-cp35m-linux_x86_64.whl 
+sudo pip3 install  --no-deps torchvision
 ```
+If pip3 breaks with error "File "/usr/local/lib/python3.5/dist-packages/pip/_vendor/pkg_resources/__init__.py", line 2121, in _rebuild_mod_path
+    orig_path.sort(key=position_in_sys_path)
+AttributeError: '_NamespacePath' object has no attribute 'sort'" , comment the line: orig_path.sort(key=position_in_sys_path). 
 
 
 
